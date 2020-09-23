@@ -17,14 +17,14 @@ The complete timelapse videos are uploaded each day to Google Drive (or anything
 - [Raspberry Pi Zero Camera Cable](https://www.adafruit.com/product/3157) (the default Pi's camera cable won't fit Zero models)
 - [Raspberry Pi camera case](https://www.adafruit.com/product/3446) (optional, but I'm using this to video plants so I want to limit the possibility of the Pi getting splashed)
 - [Micro SD card](https://www.adafruit.com/product/2693) (processing images/video is tough stuff and the Pi Zero is Not Fast so you want a fast SD card with at least 16gb. SanDisk Ultra or Extreme is recommended, but any non-budget card should do.)
-- a [Google Drive](https://drive.google.com) account
+- a [Google Drive](https://drive.google.com) account. You may want to make a new Google account for this purpose, as we'll need to give the Pi full access to whichever Google account you choose.
 
 ## Pi prep
 - [download PiOS Lite](https://www.raspberrypi.org/downloads/raspberry-pi-os/) 
 - [install PiOS on the SD card](https://www.raspberrypi.org/documentation/installation/installing-images/README.md)
 - create [wpa_supplicant.conf](https://www.raspberrypi.org/documentation/configuration/wireless/headless.md) - in the `boot` folder to enable WiFi
 - create another file in the `boot` folder named `ssh`. it doesn't need any content. This enables us to get into the Pi from our computer to manage it manually. 
-- SSH, while a secure protocol, should be managed carefully, especially because we need to give your Pi full access to your Google account! for that reason we're going to...
+- SSH, while a secure protocol, should be managed carefully, especially because we need to give your Pi full access to a Google account! for that reason we're going to...
 - [enable passwordless SSH access](https://www.raspberrypi.org/documentation/remote-access/ssh/passwordless.md)
 - [disable password authentication for SSH](https://www.hostgator.com/help/article/how-to-disable-password-authentication-for-ssh)
 - the above two steps make sure that if someone got into your home network, they couldn't get into your Pi, and then get your Google credentials even if they somehow managed to get the username and password to the Pi. The only way to access the Pi is from SSH on your computer or by pulling the Pi's SD card.
