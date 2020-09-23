@@ -42,6 +42,6 @@ The complete timelapse videos are uploaded each day to Google Drive (or anything
 ```
 - create a [Service Account](https://developers.google.com/identity/protocols/oauth2/service-account#creatinganaccount) for interacting with Google Drive.
 - download and copy the service account's JSON file to your computer, then copy it to the Pi with SCP. example - `scp ~/Downloads/SERVICEACCOUNTFILENAME.json pi@raspberrypi.home:/home/pi`
-- `rclone config` - following [this guide](https://rclone.org/drive/), we want the **service account** option because we can't  interact with a browser to complete a sign-in procedure. enter the location of the service account json you copied over. 
+- `rclone config` - following [this guide](https://rclone.org/drive/), we want the **service account** option because we can't  interact with a browser on the device to complete Google's standard [OAuth](https://en.wikipedia.org/wiki/OAuth) sign-in procedure. enter the location of the service account json file you copied over. 
 
 That should be it! You should see a images start coming into the `images/` folder, and around 1:00 you should have your timelapse videos in your Google Drive in the folder you gave to rclone.
