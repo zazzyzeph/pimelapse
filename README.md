@@ -1,11 +1,11 @@
 # pimelapse
 Timelapse generator for a raspberry pi + camera
 
-This is a collection of scripts that when configured correctly will take a picture from a connected Raspberry Pi camera every 10 minutes, compile those photos into a video, and append 
+This is a couple of bash scripts to be used with `cron` that when configured correctly will take a picture from a connected Raspberry Pi camera every 10 minutes and at the end of the day, compile those photos into a video. If there's already a video on the Pi from previous days, it will append the new video onto the old one, and upload both the current day's video and the overall timelapse to Google Drive (or another service of your choice).
 
-It is currently configured for a common ebay "IR-cut" raspberry pi camera (meaning it has infra-red LEDs attached and an IR filtering shutter [it'll switch to night vision when it's dark enough]), taking pictures at the camera's full 4:3 resolution, then resize those images into 1080p landscape and portrait mode versions.
+It is currently configured for a common ebay "IR-cut" raspberry pi camera (meaning it has infra-red LEDs attached and an IR filtering shutter [it'll switch to night vision when it's dark enough]), taking pictures at the camera's full 4:3 resolution, then resizing those images into 1080p landscape and portrait mode versions.
 
-Timelapse videos are created daily at midnight via `ffmpeg`. If there is a timelapse video from the previous day, the Pi will append the new video to the old one.
+Timelapse videos are created daily at midnight via `ffmpeg`, usually in about 20-40 minutes depending on the length of the overall timelapse video.
 
 The complete timelapse videos are uploaded each day to Google Drive (or anything supported by [rclone](https://rclone.org/)) as well as each individual day's timelapse video, reason being that the full timelapse video will start to degrade the earlier portions of the long timelapse videos due to the repeated h264 mp4 compression (mp4s require re-encoding when appending new content, so that can make things crunchy after a while)
 
