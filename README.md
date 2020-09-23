@@ -28,8 +28,9 @@ The complete timelapse videos are uploaded each day to Google Drive (or anything
 - the above two steps make sure that if someone got into your home network, they couldn't get into your Pi, and then get your Google credentials even if they somehow managed to get the username and password to the Pi. The only way to access the Pi is from SSH on your computer or by pulling the Pi's SD card.
 - power up the pi, wait ~40 seconds for it to boot, and from a terminal on your computer..
 - `ssh pi@raspberrypi.home` from a terminal / SSH app of your choice should put you in the Pi assuming all steps were followed and your Wifi information is correct.
+- `sudo apt update && sudo apt upgrade` - update all your software and repositories
+- `sudo apt install raspi-config rclone git raspistill imagemagick ffmpeg raspi-update` install needed packages
 - run `raspi-update` to get the camera firmware
-- `sudo apt install raspi-config rclone git raspistill imagemagick ffmpeg`
 - `raspi-config` - run Change Locale (probably to UTF-8), Change Timezone, Enable Camera.
 - The Pi will need to reboot. `ssh pi@raspberrypi.home` again after 40 seconds
 
