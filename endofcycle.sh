@@ -47,11 +47,18 @@ rclone copy tall_camera_$DATE.mp4 "remote:tentpicamera/tall_camera"
 # we're using the filter_complex method because concatenating mp4 files requires re-encoding.
 # there's no audio so no a: arguments, and we need to make a new file because ffmpeg wont edit the file in place
 
-ffmpeg -i wide_camera_timelapse.mp4 -i wide_camera_$DATE.mp4 -filter_complex "[0:v] [1:v] concat=n=2:v=1 [v]" -map "[v]" -b:v 5.12M -c:v h264_omx wide_camera_newtimelapse.mp4
-ffmpeg -i tall_camera_timelapse.mp4 -i tall_camera_$DATE.mp4 -filter_complex "[0:v] [1:v] concat=n=2:v=1 [v]" -map "[v]" -b:v 5.12M -c:v h264_omx tall_camera_newtimelapse.mp4
-
-mv wide_camera_newtimelapse.mp4 wide_camera_timelapse.mp4
-mv tall_camera_newtimelapse.mp4 tall_camera_timelapse.mp4
+# if we have timelapse videos already, append the day's timelapse videos onto them
+WTIMELAPSE=/home/pi/pimelapse/wide_camera_timelapse.mp4
+if test -f "$WTIMELAPSE"; then
+  ffmpeg -i wide_camera_timelapse.mp4 -i wide_camera_$DATE.mp4 -filter_complex "[0:v] [1:v] concat=n=2:v=1 [v]" -map "[v]" -b:v 5.12M -c:v h264_omx wide_camera_newtimelapse.mp4
+  ffmpeg -i tall_camera_timelapse.mp4 -i tall_camera_$DATE.mp4 -filter_complex "[0:v] [1:v] concat=n=2:v=1 [v]" -map "[v]" -b:v 5.12M -c:v h264_omx tall_camera_newtimelapse.mp4
+  mv wide_camera_newtimelapse.mp4 wide_camera_timelapse.mp4
+  mv tall_camera_newtimelapse.mp4 tall_camera_timelapse.mp4
+else
+  # otherwise just change the names of the day's timelapse to what we expect for the next time
+  mv wide_camera_$DATE.mp4 wide_camera_timelapse.mp4
+  mv tall_camera_$DATE.mp4 tall_camera_timelapse.mp4
+fi
 
 rclone copy wide_camera_timelapse.mp4 "remote:tentpicamera/wide_camera"
 rclone copy tall_camera_timelapse.mp4 "remote:tentpicamera/tall_camera"
