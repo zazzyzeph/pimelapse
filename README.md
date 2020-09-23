@@ -1,7 +1,7 @@
 # pimelapse
 Timelapse generator for a raspberry pi + camera
 
-This is a collection of scripts that when configured correctly will take a picture from a connected Raspberry Pi camera every 10 minutes, and then compile those photos into a video every day.
+This is a collection of scripts that when configured correctly will take a picture from a connected Raspberry Pi camera every 10 minutes, compile those photos into a video, and append 
 
 It is currently configured for a common ebay "IR-cut" raspberry pi camera (meaning it has infra-red LEDs attached and an IR filtering shutter [it'll switch to night vision when it's dark enough]), taking pictures at the camera's full 4:3 resolution, then resize those images into 1080p landscape and portrait mode versions.
 
@@ -20,7 +20,7 @@ The complete timelapse videos are uploaded each day to Google Drive (or anything
 ## Pi prep
 - [download PiOS Lite](https://www.raspberrypi.org/downloads/raspberry-pi-os/) 
 - [install PiOS on the SD card](https://www.raspberrypi.org/documentation/installation/installing-images/README.md)
-- create a text file in the `boot` folder to [enable WiFi](https://www.raspberrypi.org/documentation/configuration/wireless/headless.md)
+- create [wpa_supplicant.conf](https://www.raspberrypi.org/documentation/configuration/wireless/headless.md) - in the `boot` folder to enable WiFi
 - create another file in the `boot` folder named `ssh`. it doesn't need any content. This enables us to get into the Pi from our computer to manage it manually. 
 - SSH, while a secure protocol, should be managed carefully, especially because we need to give your Pi full access to your Google account! for that reason we're going to...
 - [enable passwordless SSH access](https://www.raspberrypi.org/documentation/remote-access/ssh/passwordless.md)
