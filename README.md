@@ -24,13 +24,12 @@ The complete timelapse videos are uploaded each day to Google Drive (or anything
 - [install PiOS on the SD card](https://www.raspberrypi.org/documentation/installation/installing-images/README.md)
 - create [wpa_supplicant.conf](https://www.raspberrypi.org/documentation/configuration/wireless/headless.md) - in the `boot` folder to enable WiFi
 - create another file in the `boot` folder named `ssh`. it doesn't need any content. This enables us to get into the Pi from our computer to manage it manually. 
-- SSH, while a secure protocol, should be managed carefully, especially because we need to give your Pi full access to a Google account! for that reason we're going to...
+- we should be careful about security since the Pi will have a credential file for your online file storage. the below two steps are optional but highly recommended
 - [enable passwordless SSH access](https://www.raspberrypi.org/documentation/remote-access/ssh/passwordless.md)
 - [disable password authentication for SSH](https://www.hostgator.com/help/article/how-to-disable-password-authentication-for-ssh)
-- the above two steps make sure that if someone got into your home network, they couldn't get into your Pi, and then get your Google credentials even if they somehow managed to get the username and password to the Pi. The only way to access the Pi is from SSH on your computer or by pulling the Pi's SD card.
 - power up the pi, wait ~40 seconds for it to boot, and from a terminal on your computer..
-- `ssh pi@raspberrypi.home` from a terminal / SSH app of your choice should put you in the Pi assuming all steps were followed and your Wifi information is correct.
-- `sudo apt update && sudo apt upgrade` - update all your software and repositories
+- `ssh pi@raspberrypi.home` should allow you to run commands from the Pi assuming all steps were followed and your Wifi information is correct.
+- `sudo apt update && sudo apt upgrade` - update your software and repositories
 - `sudo apt install raspi-config rclone git raspistill imagemagick ffmpeg raspi-update` install needed packages
 - run `raspi-update` to get the camera firmware
 - `raspi-config` - run Change Locale (probably to UTF-8), Change Timezone, Enable Camera.
