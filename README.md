@@ -33,7 +33,11 @@ The complete timelapse videos are uploaded each day to Google Drive (or anything
 - `sudo apt install raspi-config rclone git raspistill imagemagick ffmpeg raspi-update` install needed packages
 - run `raspi-update` to get the camera firmware
 - `raspi-config` - run Change Locale (probably to UTF-8), Change Timezone, Enable Camera.
-- The Pi will need to reboot. `ssh pi@raspberrypi.home` again after 40 seconds
+- The Pi will need to reboot. `ssh pi@raspberrypi.home` again after 40 seconds to make sure it still works
+- remove power and install your case and camera module
+- turn it back on, wait for it to boot again and `ssh pi@raspberrypi.home`
+- `raspistill -o test.jpg` - to test the camera is working. if it returns an error, make sure your camera cables are fully connected.
+- `ls` should show `test.jpg`
 
 ## Pimelapse setup
 - `git clone https://github.com/zazzyzeph/pimelapse.git` clone the repository into your home directory
