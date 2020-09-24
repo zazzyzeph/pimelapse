@@ -1,7 +1,7 @@
 # pimelapse
 Timelapse generator for a raspberry pi + camera
 
-[Example Video](https://img.youtube.com/vi/q6FfKIx5Czg/0.jpg)
+[Example Video](https://www.youtube.com/watch?v=q6FfKIx5Czg)
 
 This is a couple of bash scripts to be used with `cron` that when configured correctly will take a picture from a connected Raspberry Pi camera every 10 minutes and at the end of the day, compile those photos into a video. If there's already a video on the Pi from previous days, it will append the new video onto the old one, and upload both the current day's video and the overall timelapse to Google Drive (or another service of your choice).
 
