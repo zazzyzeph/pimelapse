@@ -1,12 +1,12 @@
 #!/bin/bash
 
-# setup requires rclone (and running rclone config, naming the remote [remote], and then making a new folder in your remote [example here is tentpicamera])
+# setup requires rclone (and running rclone config, naming the remote [remote], and then making a new folder in your remote [example here is tentp$
 # and you may need to raspi-update (grab new firmware) to get the camera modules if you installed PiOS lite
 
 DATE=$(date +"%Y-%m-%d")
 
 # tar.xz and back up jpgs. i decided not to do this anymore because it takes a really long time
-# and it still comes out to 150mb for a day's worth (144) of 1920x1080 80% quality JPEGs, and xz is a very good compression algorithm
+# and it still comes out to 150mb for a day's worth of 1920x1080 pics, and xz is a very good compression algorithm
 
 # cd ~/camera
 
@@ -17,19 +17,18 @@ DATE=$(date +"%Y-%m-%d")
 # rclone copy $DATE.tar.xz "remote:tentpicamera/"
 
 
-# camera takes large 4:3 shots, so I use those to make 16:9 (landscape) and 9:16 (portrait) videos
+# camera takes v large 4:3 shots, so I use those to make 16:9 (landscape) and 9:16 (portrait) videos
 # however, h264_omx really only works with the common "HD" resolutions (ie 1080p, 720p) and only in landscape
 # so we're gonna take the full size images and scale -> crop, and rotate the 9:16 ones to be 16:9
-# rotating it upright can be done in other software on your computer / phone more efficiently.
 
 cp -r camera/*.jpg wide_camera/
-cp -r camera/*.jpg tall_camera/
+# cp -r camera/*.jpg tall_camera/
 
 # removing base images here because the mogrify/ffmpeg stuff can take ~30 minutes and we don't want to lose any frames by deleting after its done
 rm camera/*
 
 mogrify -resize 1920 +repage -gravity Center -crop 1920x1080+0+0 +repage wide_camera/*.jpg
-mogrify -resize x1920 +repage -gravity Center -crop 1080x1920+0+0 +repage -rotate 90 +repage tall_camera/*.jpg
+# mogrify -resize x1920 +repage -gravity Center -crop 1080x1920+0+0 +repage -rotate 90 +repage tall_camera/*.jpg
 
 # convert the jpgs to an mp4
 # -c:v = codec:video, using h264_omx codec because it's GPU accelerated on the Pi Zero
@@ -37,28 +36,21 @@ mogrify -resize x1920 +repage -gravity Center -crop 1080x1920+0+0 +repage -rotat
 # -an = audio none
 # -y = dont prompt for overwriting files
 
-ffmpeg -pattern_type glob -i 'wide_camera/*.jpg' -c:v h264_omx -an -video_size 1920x1080 -b:v 5.12M -y wide_camera_$DATE.mp4
-ffmpeg -pattern_type glob -i 'tall_camera/*.jpg' -c:v h264_omx -an -video_size 1920x1080 -b:v 5.12M -y tall_camera_$DATE.mp4
+ffmpeg -pattern_type glob -i 'wide_camera/*.jpg' -c:v h264_omx -an -video_size 1920x1080 -b:v 5.12M -y fps=60 wide_camera_$DATE.mp4
+# ffmpeg -pattern_type glob -i 'tall_camera/*.jpg' -c:v h264_omx -an -video_size 1920x1080 -b:v 5.12M -y tall_camera_$DATE.mp4
 
 rclone copy wide_camera_$DATE.mp4 "remote:tentpicamera/wide_camera"
-rclone copy tall_camera_$DATE.mp4 "remote:tentpicamera/tall_camera"
+# rclone copy tall_camera_$DATE.mp4 "remote:tentpicamera/tall_camera"
 
 # stick the new video onto the end of the timelapse video
 # we're using the filter_complex method because concatenating mp4 files requires re-encoding.
 # there's no audio so no a: arguments, and we need to make a new file because ffmpeg wont edit the file in place
 
-# if we have timelapse videos already, append the day's timelapse videos onto them
-WTIMELAPSE=/home/pi/pimelapse/wide_camera_timelapse.mp4
-if test -f "$WTIMELAPSE"; then
-  ffmpeg -i wide_camera_timelapse.mp4 -i wide_camera_$DATE.mp4 -filter_complex "[0:v] [1:v] concat=n=2:v=1 [v]" -map "[v]" -b:v 5.12M -c:v h264_omx wide_camera_newtimelapse.mp4
-  ffmpeg -i tall_camera_timelapse.mp4 -i tall_camera_$DATE.mp4 -filter_complex "[0:v] [1:v] concat=n=2:v=1 [v]" -map "[v]" -b:v 5.12M -c:v h264_omx tall_camera_newtimelapse.mp4
-  mv wide_camera_newtimelapse.mp4 wide_camera_timelapse.mp4
-  mv tall_camera_newtimelapse.mp4 tall_camera_timelapse.mp4
-else
-  # otherwise just change the names of the day's timelapse to what we expect for the next time
-  mv wide_camera_$DATE.mp4 wide_camera_timelapse.mp4
-  mv tall_camera_$DATE.mp4 tall_camera_timelapse.mp4
-fi
+ffmpeg -i wide_camera_timelapse.mp4 -i wide_camera_$DATE.mp4 -filter_complex "[0:v] [1:v] concat=n=2:v=1 [v]" -map "[v]" -b:v 5.12M -c:v h264_omx $
+# ffmpeg -i tall_camera_timelapse.mp4 -i tall_camera_$DATE.mp4 -filter_complex "[0:v] [1:v] concat=n=2:v=1 [v]" -map "[v]" -b:v 5.12M -c:v h264_om$
+
+mv wide_camera_newtimelapse.mp4 wide_camera_timelapse.mp4
+# mv tall_camera_newtimelapse.mp4 tall_camera_timelapse.mp4
 
 rclone copy wide_camera_timelapse.mp4 "remote:tentpicamera/wide_camera"
 rclone copy tall_camera_timelapse.mp4 "remote:tentpicamera/tall_camera"
