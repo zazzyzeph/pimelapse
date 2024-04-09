@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# we don't want to delete anything if ffmpeg fails
+set -e
+
 # if you want to use google drive to back up your images:
 # ------------
 # sudo apt install rclone
